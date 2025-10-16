@@ -3,7 +3,7 @@
 
 Repytilian is an educational project, demonstrating how LLMs can be trained, and text generated from that model. There are two primary entry points, one for training a model from a directory of text files, and a second for generating data from that pre-computed/pre-saved model.
 
-It is based on the code from Andre's video detailed below.
+It is based on the code from Andrej's video detailed below.
 
 
 Disclaimer: This code is an OO variation of the code from the video. It contains a few improvements. It exists primarily to keep my hand in with some AI and Python development.
