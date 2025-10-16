@@ -1,0 +1,1 @@
+{"n_layer": 6, "n_head": 6, "n_embed": 384, "n_dropout": 0.2, "learning_rate": 0.0003, "block_size": 64, "batch_size": 256}

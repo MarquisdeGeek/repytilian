@@ -1,0 +1,6 @@
+the cat sat on the mat
+i like green eggs and ham
+is this a data set?
+If this is the validation set
+How will we know
+As long as it is long enough
