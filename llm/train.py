@@ -24,7 +24,7 @@ def receive_signal(signum, stack):
 def in_steps(training: LLMTraining, tokenizer: Tokenizer, sampler: Sampler, llm_settings: LLMSettings, llm_model_read: str = None):
 
     # Machine
-    device = Devices.getBestDevice()
+    device = Devices.get_best_device()
 
     # Data
     data = TrainingData(device, tokenizer, sampler)
@@ -33,7 +33,7 @@ def in_steps(training: LLMTraining, tokenizer: Tokenizer, sampler: Sampler, llm_
     model = BigramLM(device, llm_settings, data).to(device)
 
     if llm_model_read:
-        model.importModel(llm_model_read)
+        model.import_model(llm_model_read)
 
 
     # Start logging
@@ -80,7 +80,7 @@ def in_steps(training: LLMTraining, tokenizer: Tokenizer, sampler: Sampler, llm_
                 eta = time.ctime(time_start + (elapsed * training.steps_total) / steps) if steps and training.report_timestep == None else '????'
                 print(f"{elapsed}s {steps=} : {losses[LLM.TRAINING]=}  {losses[LLM.EVALUATION]=} eta={eta}", file=sys.stderr)
 
-            model.trainStep(optimizer)
+            model.train_step(optimizer)
 
             result = { 'success': True, 'model': model, 'tokenizer': tokenizer }
 

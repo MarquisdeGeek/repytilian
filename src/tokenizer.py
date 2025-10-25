@@ -26,7 +26,7 @@ class Tokenizer:
     pass
 
 
-  def exportTokens(self, filepath: str):
+  def export_tokens(self, filepath: str):
     Path(filepath).mkdir(parents=True, exist_ok=True)
 
     with open(f"{filepath}/tokens.type", "w") as f:
@@ -50,28 +50,28 @@ class Tokenizer:
 
 
 def tokenize(tokenizer_type: str, text: str = "") -> Tokenizer:
-  fn = f"tokenize{tokenizer_type.capitalize()}"
+  fn = f"tokenize_{tokenizer_type}"
   return globals()[fn](text)
 
 
-def tokenizeWords(text: str) -> Tokenizer:
+def tokenize_words(text: str) -> Tokenizer:
     return TokenizerWords(text)
 
 
-def tokenizeCharacters(text: str) -> Tokenizer:
+def tokenize_characters(text: str) -> Tokenizer:
     return TokenizerCharacters(text)
 
 
-def tokenizeTiktoken(text: str) -> Tokenizer:
+def tokenize_tiktoken(text: str) -> Tokenizer:
     return TokenizerTiktoken(text)
 
 
-def tokenizeJsontoken(text: str) -> Tokenizer:
+def tokenize_jsontoken(text: str) -> Tokenizer:
     return TokenizerJsontoken(text)
 
 
 
-def importTokens(filepath: str):
+def import_tokens(filepath: str):
   with open(f"{filepath}/tokens.type", "r") as f:
     tokenizer_type = f.read().strip()
 

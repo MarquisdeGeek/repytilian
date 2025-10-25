@@ -14,10 +14,10 @@ class LLMSettings:
 
 
     def __init__(self, name=DEFAULT):
-        self.setParameters(name)
+        self.set_parameters(name)
 
 
-    def setDefault(self):
+    def set_default(self):
         # Model
         self.n_layer = 6
         self.n_head = 4
@@ -30,7 +30,7 @@ class LLMSettings:
         self.batch_size = 64        # how many independent sequences will we process in parallel?
 
     
-    def setHyper(self):
+    def set_hyper(self):
         # Very deep and expensive computations here (all from https://github.com/karpathy/ng-video-lecture/blob/master/gpt.py)
         self.n_layer = 6
         self.n_head = 6
@@ -43,8 +43,8 @@ class LLMSettings:
 
 
     # To be extended
-    def setParameters(self, name):
-        fn = f"set{name.capitalize()}"
+    def set_parameters(self, name):
+        fn = f"set_{name}"
         getattr(self, fn)()
 
 
@@ -55,40 +55,40 @@ class LLMTraining:
 
 
     def __init__(self, name=DEFAULT):
-        self.setParameters(name)
+        self.set_parameters(name)
 
 
-    def setDefault(self):
+    def set_default(self):
         self.samples_to_calculate_loss = 50
         self.steps_total = 1000
         self.steps_logging = 10
         self.report_timestep = None
 
 
-    def setQuick(self):
+    def set_quick(self):
         self.samples_to_calculate_loss = 10
         self.steps_total = 10
         self.steps_logging = 10
         self.report_timestep = None
 
 
-    def setLong(self):
+    def set_long(self):
         self.samples_to_calculate_loss = 30
         self.steps_total = 10000
         self.steps_logging = 100
         self.report_timestep = None
 
 
-    def setForever(self):
+    def set_forever(self):
         self.samples_to_calculate_loss = 50
         self.steps_total = sys.maxsize
         self.steps_logging = 100
         self.report_timestep = 30
 
 
-    def setParameters(self, name):
+    def set_parameters(self, name):
         self.name = name
-        fn = f"set{name.capitalize()}"
+        fn = f"set_{name}"
         getattr(self, fn)()
 
 

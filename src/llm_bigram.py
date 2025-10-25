@@ -168,7 +168,7 @@ class BigramLM(nn.Module):
       torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
 
-  def exportModel(self, filepath: str) -> None:
+  def export_model(self, filepath: str) -> None:
     # These are binary formats
     Path(filepath).mkdir(parents=True, exist_ok=True)
     
@@ -180,7 +180,7 @@ class BigramLM(nn.Module):
       f.write(json.dumps(self.settings, default=vars))
 
 
-  def importModel(self, filepath: str) -> None:
+  def import_model(self, filepath: str) -> None:
     for k in self.export_attr:
       path = "{0}/{1}.pt".format(filepath, k)
       setattr(self, k, torch.load(path, weights_only=False))
@@ -261,7 +261,7 @@ class BigramLM(nn.Module):
     return out
             
 
-  def trainStep(self, optimizer) -> float:
+  def train_step(self, optimizer) -> float:
     # sample a batch of data
     xb,yb = self.data.get_batch(LLM.TRAINING, self.settings.batch_size, self.settings.block_size)
 
@@ -274,7 +274,7 @@ class BigramLM(nn.Module):
     return loss
 
 
-  def generateOutputFromTensor(self, initial_tensor: torch.tensor, max_tokens: int) -> str:
+  def generate_output_from_tensor(self, initial_tensor: torch.tensor, max_tokens: int) -> str:
      token_tensors = self.generate(initial_tensor, max_new_tokens=max_tokens)
      token_list = token_tensors[0].tolist()
      output = self.tokenizer_inst.decode(token_list)
@@ -282,18 +282,18 @@ class BigramLM(nn.Module):
      return output
 
 
-  def generateOutput(self, max_tokens: int) -> str:
+  def generate_output(self, max_tokens: int) -> str:
      # Initial fill with zeros, of type:
      # (1,1) = (B,T)
-     return self.generateOutputFromTensor(torch.zeros((1,1), dtype=torch.long, device=self.device), max_tokens)
+     return self.generate_output_from_tensor(torch.zeros((1,1), dtype=torch.long, device=self.device), max_tokens)
 
 
-  def generateOutputFrom(self, initial: any, max_tokens: int) -> str:
+  def generate_output_from(self, initial: any, max_tokens: int) -> str:
     try:
       encoded = self.tokenizer_inst.encode(initial)
       initial_tensor = torch.tensor([encoded], dtype=torch.long, device=self.device)
 
-      return self.generateOutputFromTensor(initial_tensor, max_tokens)
+      return self.generate_output_from_tensor(initial_tensor, max_tokens)
     except:
       return "Unable to generate output. Possibly because input can not be tokenised"
 

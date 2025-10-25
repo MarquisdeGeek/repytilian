@@ -30,7 +30,7 @@ print(model.tokenizer_inst, file=sys.stderr)
 # (in reality, assumes an entry point of the first token, current NL)
 if not value_initial:
   print(f"LLM generating output ({token_stdout_count} tokens):", file=sys.stderr)
-  print(model.generateOutput(token_stdout_count))
+  print(model.generate_output(token_stdout_count))
   # Or
   # print(generate.new_output(llm_model, token_stdout_count)['output'])
 
@@ -38,12 +38,12 @@ if not value_initial:
 # 2. Auto-complete, from the given input
 if value_initial:
   print(f"LLM continuing output from '{value_initial}' ({token_stdout_count} tokens):", file=sys.stderr)
-  print(model.generateOutputFrom(value_initial, token_stdout_count))
+  print(model.generate_output_from(value_initial, token_stdout_count))
   # Or
   # print(generate.continue_output("models/steev/v0w", 100,"Because")['output'])
 
 # 3. File output
 if token_filename:
   print(f"LLM generating file '{token_filename}' ({token_file_count} tokens):", file=sys.stderr)
-  open(token_filename, 'w').write(model.generateOutput(token_file_count))
+  open(token_filename, 'w').write(model.generate_output(token_file_count))
 
