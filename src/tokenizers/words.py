@@ -18,6 +18,6 @@ class TokenizerWords(Tokenizer):
     return ' '.join([itos[i] for i in l])
 
 
-  def __str__(self):
+  def __str__(self) -> str:
     return f"tokenzier (words): {super().__str__()}"
 

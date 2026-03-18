@@ -18,7 +18,7 @@ class TokenizerCharacters(Tokenizer):
     return ''.join([itos[i] for i in l])
 
 
-  def __str__(self):
+  def __str__(self) -> str:
     # TODO: Consider NL/ws to be shown as descriptions
     return f"tokenzier (characters): {super().__str__()} ({', '.join(f'{i} = {ch}' for i,ch in enumerate(self.tokens))}"
 

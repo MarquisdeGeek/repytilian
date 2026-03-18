@@ -29,6 +29,6 @@ class TokenizerTiktoken(Tokenizer):
     return self.enc.decode(l)
 
 
-  def __str__(self):
+  def __str__(self) -> str:
     return f"tokenzier (tiktoken): {super().__str__()}"
 

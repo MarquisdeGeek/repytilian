@@ -15,7 +15,7 @@ class TrainingData:
     self._training, self._validation = sampler.split(all_data)
 
 
-  def get_batch(self, split:str, batch_size: int, block_size: int):
+  def get_batch(self, split:str, batch_size: int, block_size: int) -> tuple[torch.Tensor, torch.Tensor]:
     data = self._training if split == LLM.TRAINING else self._validation
 
     ix = torch.randint(len(data) - block_size, (batch_size,))

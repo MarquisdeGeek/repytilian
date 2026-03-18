@@ -4,7 +4,7 @@ from src.llm import *
 from src.llm_bigram import *
 
 
-def create_model(llm_model):
+def create_model(llm_model) -> BigramLM:
 
   # Machine
   device = Devices.get_best_device()
@@ -31,7 +31,7 @@ def new_output(llm_model, token_count):
   return { 'output': output, 'model': model }
 
 
-def continue_output(llm_model, token_count, initial_value):
+def continue_output(llm_model, token_count, initial_value) -> dict[str, BigramLM]:
 
   model = create_model(llm_model)
 

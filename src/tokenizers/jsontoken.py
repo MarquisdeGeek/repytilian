@@ -37,6 +37,6 @@ class TokenizerJsontoken(Tokenizer):
     return json.dumps([ self.tokens[idx] for idx in l ])
 
 
-  def __str__(self):
+  def __str__(self) -> str:
     return f"tokenzier (jsontoken): {super().__str__()}"
 

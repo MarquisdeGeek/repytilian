@@ -19,7 +19,7 @@ pip3 install -r requirements.txt
 
 Or, for a less verbose set of modules:
 ```
-  pip install torch numpy transformers datasets tiktoken wandb tqdm
+  pip install torch numpy transformers datasets tiktoken wandb tqdm onnx onnxscript
 ```
 
 

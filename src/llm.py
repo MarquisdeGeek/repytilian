@@ -17,7 +17,7 @@ class LLMSettings:
         self.set_parameters(name)
 
 
-    def set_default(self):
+    def set_default(self) -> None:
         # Model
         self.n_layer = 6
         self.n_head = 4
@@ -30,7 +30,7 @@ class LLMSettings:
         self.batch_size = 64        # how many independent sequences will we process in parallel?
 
     
-    def set_hyper(self):
+    def set_hyper(self) -> None:
         # Very deep and expensive computations here (all from https://github.com/karpathy/ng-video-lecture/blob/master/gpt.py)
         self.n_layer = 6
         self.n_head = 6
@@ -43,7 +43,7 @@ class LLMSettings:
 
 
     # To be extended
-    def set_parameters(self, name):
+    def set_parameters(self, name) -> None:
         fn = f"set_{name}"
         getattr(self, fn)()
 
@@ -58,39 +58,39 @@ class LLMTraining:
         self.set_parameters(name)
 
 
-    def set_default(self):
+    def set_default(self) -> None:
         self.samples_to_calculate_loss = 50
         self.steps_total = 1000
         self.steps_logging = 10
         self.report_timestep = None
 
 
-    def set_quick(self):
+    def set_quick(self) -> None:
         self.samples_to_calculate_loss = 10
         self.steps_total = 10
         self.steps_logging = 10
         self.report_timestep = None
 
 
-    def set_long(self):
+    def set_long(self) -> None:
         self.samples_to_calculate_loss = 30
         self.steps_total = 10000
         self.steps_logging = 100
         self.report_timestep = None
 
 
-    def set_forever(self):
+    def set_forever(self) -> None:
         self.samples_to_calculate_loss = 50
         self.steps_total = sys.maxsize
         self.steps_logging = 100
         self.report_timestep = 30
 
 
-    def set_parameters(self, name):
+    def set_parameters(self, name) -> None:
         self.name = name
         fn = f"set_{name}"
         getattr(self, fn)()
 
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name} : loss samples {self.samples_to_calculate_loss}, steps_total={self.steps_total} steps_logging={self.steps_logging}"

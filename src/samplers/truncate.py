@@ -8,7 +8,7 @@ class BasicTruncate(Sampler):
         self.percentage = percentage_to_train
 
 
-    def split(self, data: torch.Tensor):
+    def split(self, data: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         n = int(self.percentage * len(data))
 
         training = data[:n]

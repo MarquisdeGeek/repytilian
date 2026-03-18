@@ -40,11 +40,11 @@ class Tokenizer:
 
 
   @property
-  def vocab_size(self):
+  def vocab_size(self) -> int:
       return len(self.tokens)
   
 
-  def __str__(self):
+  def __str__(self) -> str:
     return f"{self.vocab_size}"
 
 
@@ -71,7 +71,7 @@ def tokenize_jsontoken(text: str) -> Tokenizer:
 
 
 
-def import_tokens(filepath: str):
+def import_tokens(filepath: str) -> Tokenizer:
   with open(f"{filepath}/tokens.type", "r") as f:
     tokenizer_type = f.read().strip()
 
