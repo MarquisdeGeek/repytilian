@@ -2,6 +2,12 @@ import src.tokenizer as tokenizer
 from src.devices import Devices
 from src.llm import *
 from src.llm_bigram import *
+from typing import TypedDict
+
+
+class OutputResult(TypedDict):
+    output: str
+    model: object
 
 
 def create_model(llm_model) -> BigramLM:
@@ -20,7 +26,7 @@ def create_model(llm_model) -> BigramLM:
   return model
 
 
-def new_output(llm_model, token_count) -> dict[str, object]:
+def new_output(llm_model, token_count) -> OutputResult:
 
   model = create_model(llm_model)
 
@@ -28,10 +34,10 @@ def new_output(llm_model, token_count) -> dict[str, object]:
   output = model.generate_output(token_count)
 
   # Provide it
-  return { 'output': output, 'model': model }
+  return OutputResult({ 'output': output, 'model': model })
 
 
-def continue_output(llm_model, token_count, initial_value) -> dict[str, object]:
+def continue_output(llm_model, token_count, initial_value) -> OutputResult:
 
   model = create_model(llm_model)
 
@@ -39,5 +45,5 @@ def continue_output(llm_model, token_count, initial_value) -> dict[str, object]:
   output = model.generate_output_from(initial_value, token_count)
 
   # Provide it
-  return { 'output': output, 'model': model }
+  return OutputResult({ 'output': output, 'model': model })
 
