@@ -6,6 +6,13 @@ from src.training_data import TrainingData
 from src.devices import Devices
 from src.llm import LLMSettings, LLM, LLMTraining
 from src.llm_bigram import *
+from typing import TypedDict
+
+
+class StepsResult(TypedDict):
+    success: bool
+    model: BigramLM
+    tokenizer: Tokenizer
 
 
 early_break = {
@@ -21,7 +28,7 @@ def receive_signal(signum, stack):
     print(f"Received signal {signum}, {'' if early_break['exit'] else 'not'} breaking", file=sys.stderr)
 
 
-def in_steps(training: LLMTraining, tokenizer: Tokenizer, sampler: Sampler, llm_settings: LLMSettings, llm_model_read: str = None):
+def in_steps(training: LLMTraining, tokenizer: Tokenizer, sampler: Sampler, llm_settings: LLMSettings, llm_model_read: str|None = None) -> StepsResult:
 
     # Machine
     device = Devices.get_best_device()
@@ -57,7 +64,7 @@ def in_steps(training: LLMTraining, tokenizer: Tokenizer, sampler: Sampler, llm_
     time_start = time.time()
     time_last_report = time_start
 
-    result = {}
+    result = StepsResult({'success':False, 'model':model, 'tokenizer':tokenizer})
 
     try:
         for steps in range(training.steps_total):
@@ -82,11 +89,11 @@ def in_steps(training: LLMTraining, tokenizer: Tokenizer, sampler: Sampler, llm_
 
             model.train_step(optimizer)
 
-            result = { 'success': True, 'model': model, 'tokenizer': tokenizer }
+            result['success'] = True
 
 
     except KeyboardInterrupt:
-        result = { 'success': False, 'model': model, 'tokenizer': tokenizer }
+        pass # we've already recorded a fail case in result
 
 
     return result

@@ -65,11 +65,11 @@ else:
 # Model
 llm_settings = LLMSettings(llm_model_settings)
 sampler = BasicTruncate(0.9)
-tokenizer = tokenizer.tokenize(tokenizer_type, text)
+the_tokenizer = tokenizer.tokenize(tokenizer_type, text)
 
 
 # Do it
-results = train.in_steps(training, tokenizer, sampler, llm_settings, llm_model_read)
+results = train.in_steps(training, the_tokenizer, sampler, llm_settings, llm_model_read)
 
 
 # Save the model?

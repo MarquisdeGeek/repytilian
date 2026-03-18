@@ -20,7 +20,7 @@ def create_model(llm_model) -> BigramLM:
   return model
 
 
-def new_output(llm_model, token_count):
+def new_output(llm_model, token_count) -> dict[str, object]:
 
   model = create_model(llm_model)
 
@@ -31,7 +31,7 @@ def new_output(llm_model, token_count):
   return { 'output': output, 'model': model }
 
 
-def continue_output(llm_model, token_count, initial_value) -> dict[str, BigramLM]:
+def continue_output(llm_model, token_count, initial_value) -> dict[str, object]:
 
   model = create_model(llm_model)
 

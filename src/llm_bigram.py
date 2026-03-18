@@ -7,6 +7,7 @@ from src.training_data import TrainingData
 from src.llm import LLMSettings, LLM
 from src.tokenizer import *
 from pathlib import Path
+from typing import Any
 
 
 class FeedForward(nn.Module):
@@ -22,7 +23,7 @@ class FeedForward(nn.Module):
             nn.Dropout(n_dropout)
         )
 
-    def forward(self, x) -> torch.tensor:
+    def forward(self, x: torch.Tensor) -> nn.Sequential:
         return self.net(x)
     
 
@@ -40,7 +41,7 @@ class Block(nn.Module):
         self.ln1 = nn.LayerNorm(settings.n_embed)
         self.ln2 = nn.LayerNorm(settings.n_embed)
 
-    def forward(self, x) -> torch.tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x+ means we're include both the calc path, and the skip path
         x = x + self.sa(self.ln1(x))
         x = x + self.ffwd(self.ln2(x))
@@ -58,12 +59,13 @@ class Head(nn.Module):
         self.value = nn.Linear(settings.n_embed, head_size, bias=False)
 
         self.register_buffer('tril', torch.tril(torch.ones(settings.block_size, settings.block_size)))
+        self.tril: torch.Tensor
 
-        # FInale
+        # Finale
         self.dropout = nn.Dropout(settings.n_dropout)
 
 
-    def forward(self, x) -> torch.tensor:
+    def forward(self, x: torch.Tensor) -> nn.Sequential:
         B,T,C = x.shape
 
         k = self.key(x)       # (B,T,C)
@@ -98,7 +100,7 @@ class MultiHeadAttention(nn.Module):
         self.dropout = nn.Dropout(settings.n_dropout)
 
     
-    def forward(self, x) -> torch.tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         out = torch.cat([h(x) for h in self.heads], dim=-1)
         out = self.proj(out)
         out = self.dropout(out)
@@ -107,7 +109,8 @@ class MultiHeadAttention(nn.Module):
 
 class BigramLM(nn.Module):
 
-  def __init__(self, device: str, settings: LLMSettings, data: Tokenizer | TrainingData):
+  # data could be either TrainingData (for training) or Tokenizer (for generation)
+  def __init__(self, device: str, settings: LLMSettings, data: Any):
     super().__init__()
 
     self.settings = settings    # for access in member fn
@@ -186,7 +189,7 @@ class BigramLM(nn.Module):
       setattr(self, k, torch.load(path, weights_only=False))
 
 
-  def forward(self, idx: tuple, targets=None) -> tuple[tuple, any]:
+  def forward(self, idx: torch.Tensor, targets=None) -> tuple[tuple, Any]:
     B, T = idx.shape
 
     # We change our embeddings to hold both the token and the token's position
@@ -218,7 +221,7 @@ class BigramLM(nn.Module):
     return logits,loss
   
 
-  def generate(self, idx: tuple, max_new_tokens: int) -> tuple:
+  def generate(self, idx: torch.Tensor, max_new_tokens: int) -> torch.Tensor:
     # idx is (B,T)
     for _ in range(max_new_tokens):
       # crop to block size
@@ -244,7 +247,7 @@ class BigramLM(nn.Module):
 
   # no back propagation will occur on the data in this fn (so no exta data is stored)
   @torch.no_grad()
-  def estimate_loss(self, data: Tokenizer, settings: LLMSettings, eval_iters: int) -> dict:
+  def estimate_loss(self, data, settings: LLMSettings, eval_iters: int) -> dict:
     out = {}
     self.eval() # change to eval phase
 
@@ -262,6 +265,10 @@ class BigramLM(nn.Module):
             
 
   def train_step(self, optimizer) -> float:
+    # Should only happen if generator (accidentally) calls the train_step
+    if not self.data:
+      return 0
+
     # sample a batch of data
     xb,yb = self.data.get_batch(LLM.TRAINING, self.settings.batch_size, self.settings.block_size)
 
@@ -274,7 +281,7 @@ class BigramLM(nn.Module):
     return loss
 
 
-  def generate_output_from_tensor(self, initial_tensor: torch.tensor, max_tokens: int) -> str:
+  def generate_output_from_tensor(self, initial_tensor: torch.Tensor, max_tokens: int) -> str:
      token_tensors = self.generate(initial_tensor, max_new_tokens=max_tokens)
      token_list = token_tensors[0].tolist()
      output = self.tokenizer_inst.decode(token_list)
@@ -288,7 +295,7 @@ class BigramLM(nn.Module):
      return self.generate_output_from_tensor(torch.zeros((1,1), dtype=torch.long, device=self.device), max_tokens)
 
 
-  def generate_output_from(self, initial: any, max_tokens: int) -> str:
+  def generate_output_from(self, initial: Any, max_tokens: int) -> str:
     try:
       encoded = self.tokenizer_inst.encode(initial)
       initial_tensor = torch.tensor([encoded], dtype=torch.long, device=self.device)

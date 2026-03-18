@@ -22,7 +22,7 @@ def load_textfiles_from_path(dirpath: str) -> str:
 def get_file_list(directoryName: str, extension: str) -> list:
     fnl = []
     for (dirpath, _, filenames) in walk(directoryName):
-        [fnl.append(join(dirpath, f)) for f in filenames if f.endswith(extension)]
+        fnl = [join(dirpath, f) for f in filenames if f.endswith(extension)]
 
     return fnl
 

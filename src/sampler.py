@@ -1,5 +1,8 @@
+import torch
+from abc import ABC, abstractmethod
 
-class Sampler:
+class Sampler(ABC):
 
-  def split(self, _: str):
+  @abstractmethod
+  def split(self, _: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
     pass

@@ -9,7 +9,7 @@ class TokenizerJsontoken(Tokenizer):
         tokens = []
         dataset = []
     else:
-        data = json.loads(source) if source else []
+        data = json.loads(source) if source else {'value_list':[]}
 
         dataset = data['value_list']
         tokens = list(set(dataset))

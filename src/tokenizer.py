@@ -1,10 +1,11 @@
 import pickle
 import json
 from pathlib import Path
+from abc import ABC, abstractmethod
 
 # NOTE: Imports for the specific tokenizers are at the end of the file
 
-class Tokenizer:
+class Tokenizer(ABC):
   # Types of tokenizer supported
   # TODO: Move to better pattern
   OPTIONS = [ "characters", "words", "tiktoken", "jsontoken" ]
@@ -18,11 +19,13 @@ class Tokenizer:
 
 
   # From the character symbols, to a token list
-  def encode(self, s: str):
+  @abstractmethod
+  def encode(self, s: str) -> list:
     pass
 
   # From a list of tokens, to a string
-  def decode(self, l: list):
+  @abstractmethod
+  def decode(self, l: list) -> str:
     pass
 
 

@@ -53,6 +53,12 @@ class LLMTraining:
     OPTIONS = [ "default", "quick", "long", "forever" ]
     DEFAULT = OPTIONS[0]
 
+    samples_to_calculate_loss: int
+    steps_total: int
+    steps_logging: int
+    steps_interval: int
+    report_timestep: float | None
+
 
     def __init__(self, name=DEFAULT):
         self.set_parameters(name)
